@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ChatGPT Bulk Export</title>
+  <script src="jszip.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #1a1a1a;
+      color: #e0e0e0;
+      display: flex;
+      justify-content: center;
+      padding: 60px 20px;
+    }
+    .container { width: 500px; }
+    h1 { font-size: 22px; margin-bottom: 16px; }
+    .status { font-size: 13px; color: #888; margin-bottom: 16px; }
+    .status.ok { color: #4caf50; }
+    .status.error { color: #f44336; }
+
+    .section { margin-bottom: 18px; }
+    .section > label { font-size: 14px; font-weight: 600; display: block; margin-bottom: 8px; }
+
+    .radio-group { display: flex; gap: 16px; }
+    .radio-group label { font-weight: normal; display: flex; align-items: center; gap: 5px; cursor: pointer; font-size: 14px; }
+
+    .progress-wrap { display: none; margin-bottom: 16px; }
+    .progress-bar { width: 100%; height: 14px; background: #333; border-radius: 7px; overflow: hidden; }
+    .progress-fill { height: 100%; width: 0%; background: #4caf50; transition: width 0.3s; }
+    .progress-text { font-size: 13px; color: #aaa; margin-top: 6px; }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    #exportBtn { background: #4caf50; color: white; }
+    #exportBtn:hover { background: #43a047; }
+    #exportBtn:disabled { background: #333; color: #666; cursor: not-allowed; }
+    #cancelBtn { background: #555; color: #ddd; margin-top: 10px; display: none; }
+    #cancelBtn:hover { background: #666; }
+
+    .log { font-size: 12px; color: #777; max-height: 120px; overflow-y: auto; margin-top: 12px; word-break: break-all; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>ChatGPT Bulk Export</h1>
+    <div id="status" class="status">Checking auth...</div>
+
+    <div class="section">
+      <label>Format</label>
+      <div class="radio-group">
+        <label><input type="radio" name="format" value="json" checked> JSON</label>
+        <label><input type="radio" name="format" value="markdown"> Markdown</label>
+        <label><input type="radio" name="format" value="text"> Text</label>
+      </div>
+    </div>
+
+    <div class="section">
+      <label>Content</label>
+      <div class="radio-group">
+        <label><input type="radio" name="mode" value="both" checked> Both</label>
+        <label><input type="radio" name="mode" value="assistant"> Assistant only</label>
+      </div>
+    </div>
+
+    <div class="progress-wrap" id="progressWrap">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-text" id="progressText">0 / 0</div>
+    </div>
+
+    <button id="exportBtn" disabled>Export All Conversations</button>
+    <button id="cancelBtn">Cancel</button>
+    <div class="log" id="log"></div>
+  </div>
+
+  <script src="export.js"></script>
+</body>
+</html>
